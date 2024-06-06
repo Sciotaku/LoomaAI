@@ -22,6 +22,6 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them:
 
 ```bash
-git clone https://github.com/yourusername/yourrepositoryname.git
-cd yourrepositoryname
+git clone https://github.com/Sciotaku/LoomaAI.git
+cd LoomaAI
 pip install -r requirements.txt
