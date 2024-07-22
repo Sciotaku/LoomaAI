@@ -1,35 +1,49 @@
 import requests
-import fitz  # PyMuPDF
 
-def extract_text_from_pdf(pdf_path, start_page, end_page):
-    doc = fitz.open(pdf_path)
-    text = ""
-    for page_num in range(start_page, end_page + 1):
-        page = doc.load_page(page_num)
-        text += page.get_text()
-    return text
+# Function to extract text from PDF using the text extraction server
+def extract_text_from_pdf(file_path, start_page, end_page):
+    url = "http://localhost:5001/extract_text"
+    files = {'file': open(file_path, 'rb')}
+    data = {'start_page': start_page, 'end_page': end_page}
+    response = requests.post(url, files=files, data=data)
+    return response.json()['text']
 
-def summarize_text(chapter_text):
-    url = "http://localhost:5001/api/summarize"
-    headers = {'Content-Type': 'application/json'}
-    data = {'text': chapter_text}
-
+# Function to summarize text using the Llama3 API
+def llama3(prompt):
+    url = "http://localhost:11434/api/chat"  # Ensure this is the correct URL for your local Llama3 instance
+    data = {
+        "model": "llama3",
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "stream": False
+    }
+    
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    
     response = requests.post(url, headers=headers, json=data)
-    if response.status_code == 200:
-        return response.json().get('summary')
-    else:
-        return f"Error: {response.status_code}, {response.text}"
+    return response.json()['message']['content']
 
-# Define the path to your PDF and the range of pages for the chapter you want to summarize
-pdf_path = 'MATH_76_Paper.pdf'
-start_page = 0  # Adjust as needed
-end_page = 1    # Adjust as needed
+# Main function to extract text and generate summary
+def main():
+    file_path = "looma_sample_book.pdf"  # Replace with the path to your PDF
+    start_page = 5
+    end_page = 14
+    
+    chapter_1_text = extract_text_from_pdf(file_path, start_page, end_page)
+    chapter_1_summary = llama3(f"Summarize the following text: {chapter_1_text}")
+    
+    print(f"Summary of Chapter 1:\n{chapter_1_summary}")
+    
+    with open("chapter_1_summary.txt", "w") as file:
+        file.write(chapter_1_summary)
+    
+    print("Summary saved to chapter_1_summary.txt")
 
-# Extract text from the specified chapter
-chapter_text = extract_text_from_pdf(pdf_path, start_page, end_page)
-
-# Summarize the extracted text
-summary = summarize_text(chapter_text)
-
-# Print the summary
-print("Summary:", summary)
+if __name__ == '__main__':
+    main()
