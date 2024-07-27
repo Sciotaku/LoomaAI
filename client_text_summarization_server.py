@@ -10,7 +10,7 @@ def extract_text_from_pdf(file_path, start_page, end_page):
 
 # Function to summarize text using the Llama3 API
 def llama3(prompt):
-    url = "http://localhost:11434/api/chat"  # Ensure this is the correct URL for your local Llama3 instance
+    url = "http://localhost:11434/api/chat"  
     data = {
         "model": "llama3",
         "messages": [
@@ -31,7 +31,7 @@ def llama3(prompt):
 
 # Main function to extract text and generate summary
 def main():
-    file_path = "looma_sample_book.pdf"  # Replace with the path to your PDF
+    file_path = "looma_sample_book.pdf" 
     start_page = 5
     end_page = 14
     
