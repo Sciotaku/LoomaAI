@@ -1,17 +1,35 @@
-The text discusses the concept of scientific units in physics. There are two types of units:
+The text discusses the concept of scientific units in physics. It explains that there are two types of units: fundamental units and derived units.
 
-1. **Fundamental units**: These are independent units that cannot be broken down into simpler forms. In the SI system, there are 7 fundamental units:
-	* Temperature: Kelvin (K)
-	* Luminous intensity: Candela (cd)
-	* Electric current: Ampere (A)
-	* Amount of substance: Mole (mol)
-2. **Derived units**: These are combinations of two or more fundamental units to measure a physical quantity. Examples include:
-	* Density: kg/m³
-	* Force: N (newton) = kg·m/s²
-	* Pressure: Pa (pascal) = kg/m·s²
+**Fundamental Units**
 
-The text also explains how to analyze the composition of derived units by breaking down the formula for a physical quantity into its fundamental units. For example, the unit of area is m² because it combines length and breadth.
+* Have independent existence and cannot be broken down into simpler forms
+* Examples:
+	+ Mass: kilogram (kg)
+	+ Time: second (s)
+	+ Length: meter (m)
 
-Additionally, the text discusses the importance of unit analysis in checking the validity of scientific equations. It provides an example where performing unit analysis on an equation reveals whether it is valid or not.
+There are seven fundamental units in the SI system:
 
-Finally, the text concludes with an activity for students to find various units used to measure different physical quantities in their daily lives and classify them into fundamental and derived units.
+1. Temperature: kelvin (K)
+2. Luminous intensity: candela (cd)
+3. Electric current: ampere (A)
+4. Amount of substance: none
+
+**Derived Units**
+
+* Formed from combinations of fundamental units
+* Examples:
+	+ Density: kg/m^
+	+ Force: newton (N) = kgm/s^
+	+ Pressure: pascal (Pa) = kgm^-s^
+* Many derived units have simpler names, such as newton and pascal
+
+The text also provides a table showing various physical quantities and their corresponding units, including fundamental and derived units.
+
+**Analysis of Unitwise Equation**
+
+* The validity of an equation can be checked by analyzing the units involved in the equation
+* Both sides of the equation must have the same unit
+* Example: s = vxt is valid because m (left-hand side) is equal to ms^-1s (right-hand side)
+
+Overall, the text provides a comprehensive introduction to scientific units and their importance in physics.

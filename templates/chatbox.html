@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox</title>
+    <style>
+        .chatbox {
+            width: 300px;
+            height: 450px; /* Adjusted height to accommodate logos */
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .logos {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logos img {
+            max-width: 100px; /* Adjust as needed */
+            margin: 5px;
+        }
+        .messages {
+            height: 300px; /* Adjusted height to accommodate logos */
+            overflow-y: scroll;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .messages p {
+            padding: 5px;
+            margin: 5px 0;
+        }
+        .input {
+            display: flex;
+        }
+        .input input {
+            flex: 1;
+            padding: 5px;
+        }
+        .input button {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox">
+        <div class="logos">
+            <img src="{{ url_for('static', filename='images/CEHRD-logo.png') }}" alt="CEHRD Logo">
+            <img src="{{ url_for('static', filename='images/Looma-english-amanda 3x1.png') }}" alt="Looma Logo">
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="input">
+            <input type="text" id="userInput" placeholder="Enter chapter ID..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function appendMessage(message, isUser) {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            if (isUser) {
+                messageElement.style.textAlign = 'right';
+                messageElement.style.backgroundColor = '#e1ffc7';
+            } else {
+                messageElement.style.backgroundColor = '#f1f1f1';
+            }
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() === '') return;
+            appendMessage(userInput, true);
+
+            fetch('/generate_summary', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ chapter_id: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.summary) {
+                    appendMessage(data.summary, false);
+                } else {
+                    appendMessage(`Error: ${data.error}`, false);
+                }
+            })
+            .catch(error => {
+                appendMessage(`Error: ${error.message}`, false);
+            });
+
+            document.getElementById('userInput').value = '';
+        }
+    </script>
+</body>
+</html>
