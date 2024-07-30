@@ -3,51 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbox</title>
+    <title>LoomaAI</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
         .chatbox {
-            width: 300px;
-            height: 450px; /* Adjusted height to accommodate logos */
+            width: 400px;
+            height: 600px;
             border: 1px solid #ccc;
-            padding: 10px;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #0078D4;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
         }
         .logos {
             text-align: center;
-            margin-bottom: 10px;
+            margin: 10px 0;
         }
         .logos img {
-            max-width: 100px; /* Adjust as needed */
-            margin: 5px;
+            max-width: 80px;
+            margin: 0 10px;
         }
         .messages {
-            height: 300px; /* Adjusted height to accommodate logos */
-            overflow-y: scroll;
-            border-bottom: 1px solid #ccc;
-            margin-bottom: 10px;
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         .messages p {
-            padding: 5px;
             margin: 5px 0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .messages p.user {
+            align-self: flex-end;
+            background-color: #e1ffc7;
+        }
+        .messages p.bot {
+            align-self: flex-start;
+            background-color: #f1f1f1;
         }
         .input {
             display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
         }
         .input input {
             flex: 1;
-            padding: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
         }
         .input button {
-            padding: 5px 10px;
+            padding: 10px;
+            background-color: #0078D4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input button:hover {
+            background-color: #005bb5;
         }
     </style>
 </head>
 <body>
     <div class="chatbox">
+        <div class="header">LoomaAI</div>
         <div class="logos">
             <img src="{{ url_for('static', filename='images/CEHRD-logo.png') }}" alt="CEHRD Logo">
             <img src="{{ url_for('static', filename='images/Looma-english-amanda 3x1.png') }}" alt="Looma Logo">
@@ -65,10 +106,9 @@
             const messageElement = document.createElement('p');
             messageElement.textContent = message;
             if (isUser) {
-                messageElement.style.textAlign = 'right';
-                messageElement.style.backgroundColor = '#e1ffc7';
+                messageElement.classList.add('user');
             } else {
-                messageElement.style.backgroundColor = '#f1f1f1';
+                messageElement.classList.add('bot');
             }
             messagesDiv.appendChild(messageElement);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;

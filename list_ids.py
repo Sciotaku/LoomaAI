@@ -4,18 +4,20 @@ from pymongo import MongoClient
 client = MongoClient("mongodb://localhost:27017/")
 db = client.get_database("looma")
 
-# List all textbooks and chapters
-def list_ids():
-    textbooks = db.get_collection("textbooks")
-    chapters = db.get_collection("chapters")
-
-    print("Textbook Prefixes:")
-    for textbook in textbooks.find({}, {"prefix": 1}):
-        print(textbook["prefix"])
-
-    print("\nChapter IDs:")
-    for chapter in chapters.find({}, {"_id": 1}):
-        print(chapter["_id"])
+def generate_chapter_ids():
+    # Access the chapters collection
+    chapters_collection = db.get_collection("chapters")
+    
+    # Fetch all chapter IDs
+    chapter_ids = chapters_collection.find({}, {"_id": 1})
+    
+    # Generate a list of chapter IDs
+    chapter_id_list = [chapter["_id"] for chapter in chapter_ids]
+    
+    return chapter_id_list
 
 if __name__ == "__main__":
-    list_ids()
+    chapter_ids = generate_chapter_ids()
+    print("List of Chapter IDs:")
+    for chapter_id in chapter_ids:
+        print(chapter_id)
