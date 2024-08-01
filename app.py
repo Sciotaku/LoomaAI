@@ -8,8 +8,6 @@ from pymongo import MongoClient
 from pdf2image import convert_from_bytes
 import pytesseract
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.docstore.document import Document
 
 app = Flask(__name__, static_folder='static')
 
