@@ -11,7 +11,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 app = Flask(__name__, static_folder='static')
 
-# Initialize the HuggingFace embeddings model
+# Initializing the HuggingFace embeddings model
 model_name = "sentence-transformers/all-mpnet-base-v2"
 model_kwargs = {}
 encode_kwargs = {'normalize_embeddings': False}
@@ -47,7 +47,7 @@ def generate_summary():
         data = request.json
         chapter_id = data.get('chapter_id')
         
-        # Fetch the chapter for the given chapter ID
+        # Fetching the chapter for the given chapter ID
         chapter = db.chapters.find_one({"_id": chapter_id})
         if not chapter:
             return jsonify({"error": "Chapter not found"}), 404
@@ -61,18 +61,18 @@ def generate_summary():
         if first_page == "" or last_page == "":
             return jsonify({"error": "Invalid page numbers"}), 400
         
-        # Retrieve the corresponding textbook
+        # Retrieving the corresponding textbook
         textbook = db.textbooks.find_one({"prefix": grade_level + subject})
         if not textbook:
             return jsonify({"error": "Textbook not found"}), 404
         
-        # Construct the URL to download the PDF
+        # Constructing the URL to download the PDF
         url = f"https://looma.website/content/{textbook['fp']}{textbook['fn']}"
         resp = requests.get(url)
         if resp.status_code != 200:
             return jsonify({"error": f"Failed to download PDF from {url}. Status code: {resp.status_code}"}), 500
         
-        # Extract text from the PDF
+        # Extracting text from the PDF
         pdf = io.BytesIO(resp.content)
         text = ""
         with fitz.open(stream=pdf, filetype="pdf") as doc:
@@ -87,7 +87,7 @@ def generate_summary():
                     for image in images:
                         text += perform_ocr(image)
         
-        # Generate a summary using the text
+        # Generating a summary using the text
         summary = llama3(f"Summarize the following text: {text}")
         
         return jsonify({"chapter_id": chapter_id, "summary": summary})
