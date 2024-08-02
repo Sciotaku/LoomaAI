@@ -17,10 +17,6 @@ The Looma Education System is utilized extensively across Nepal, delivering gove
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites
-
-What things you need to install the software and how to install them:
-
 ```bash
 git clone https://github.com/Sciotaku/LoomaAI.git
 cd LoomaAI
