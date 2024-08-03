@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoomaAI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chatbox {
+            width: 400px;
+            height: 600px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #0078D4;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .logos {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .logos img {
+            max-width: 80px;
+            margin: 0 10px;
+        }
+        .messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .messages p {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .messages p.user {
+            align-self: flex-end;
+            background-color: #e1ffc7;
+        }
+        .messages p.bot {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+        }
+        .input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        .input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .input button {
+            padding: 10px;
+            background-color: #0078D4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox">
+        <div class="header">LoomaAI</div>
+        <div class="logos">
+            <img src="{{ url_for('static', filename='images/CEHRD-logo.png') }}" alt="CEHRD Logo">
+            <img src="{{ url_for('static', filename='images/Looma-english-amanda 3x1.png') }}" alt="Looma Logo">
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="input">
+            <input type="text" id="userInput" placeholder="Enter chapter ID..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function appendMessage(message, isUser) {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            if (isUser) {
+                messageElement.classList.add('user');
+            } else {
+                messageElement.classList.add('bot');
+            }
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() === '') return;
+            appendMessage(userInput, true);
+
+            fetch('/generate_topics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ chapter_id: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.topics) {
+                    data.topics.forEach(topic => appendMessage(topic, false));
+                } else {
+                    appendMessage(`Error: ${data.error}`, false);
+                }
+            })
+            .catch(error => {
+                appendMessage(`Error: ${error.message}`, false);
+            });
+
+            document.getElementById('userInput').value = '';
+        }
+    </script>
+</body>
+</html>
