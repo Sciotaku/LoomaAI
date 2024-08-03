@@ -1,7 +1,7 @@
 import requests
 
 def get_chapter_topics(chapter_id):
-    url = "http://localhost:5001/generate_topics"
+    url = "http://localhost:5002/generate_topics"
     data = {"chapter_id": chapter_id}
     response = requests.post(url, json=data)
     response.raise_for_status()
